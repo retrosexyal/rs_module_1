@@ -12,24 +12,15 @@ export class Search extends Component {
   handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     this.context.handleInputChange(event);
   };
+
   handleClick = async () => {
+    this.context.handleLoading(true);
     LocalStorageManager.set("search", this.context.inputValue);
     const { data } = await FetchData.getSearch(this.context.inputValue);
-    this.context.data = data.result;
+    this.context.handleData(data.results);
+    this.context.handleLoading(false);
   };
-  componentDidMount(): void {
-    const lastSearch = LocalStorageManager.get("search");
-    const fetchData = async () => {
-      if (lastSearch) {
-        const { data } = await FetchData.getSearch(this.context.inputValue);
-        this.context.data = data.result;
-      } else {
-        const { data } = await FetchData.getSearch();
-        this.context.data = data.result;
-      }
-    };
-    fetchData();
-  }
+
   render() {
     return (
       <div>
