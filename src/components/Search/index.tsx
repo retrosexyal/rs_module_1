@@ -4,6 +4,7 @@ import { Button } from "../UI/Button";
 import { FetchData } from "../../api/FetchData";
 import { LocalStorageManager } from "../../helpers/LocalStorageManager";
 import SearchContext from "../../providers/SearchProviders";
+import styles from "./search.module.scss";
 
 export class Search extends Component {
   static contextType = SearchContext;
@@ -20,12 +21,26 @@ export class Search extends Component {
     this.context.handleData(data.results);
     this.context.handleLoading(false);
   };
+  componentDidMount(): void {
+    const value = LocalStorageManager.get("search");
+    if (value) {
+      const event = {
+        target: {
+          value: value,
+        },
+      };
+      this.context.handleInputChange(event as ChangeEvent<HTMLInputElement>);
+    }
+  }
 
   render() {
     return (
-      <div>
-        <Input onChange={this.handleInputChange} />
-        <Button onClick={this.handleClick} />
+      <div className={styles["search-wrapper"]}>
+        <Input
+          onChange={this.handleInputChange}
+          value={this.context.inputValue}
+        />
+        <Button onClick={this.handleClick} text="find" />
       </div>
     );
   }
