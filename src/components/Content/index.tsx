@@ -22,7 +22,7 @@ export class Content extends React.Component {
         const { data } = await FetchData.getSearch();
         this.context.handleData(data.results);
         this.context.handleLoading(false);
-        console.log(data);
+        console.log(data as any);
       }
     };
     fetchData();
