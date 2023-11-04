@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { IData } from "../../interface";
-import { getPersonId } from "../../helpers/GetPersonId";
+import { getPersonId } from "../../helpers/getPersonId";
 import { URL } from "../../api/url";
 import styles from "./card.module.scss";
 
