@@ -16,3 +16,8 @@ export interface IData {
   edited: string;
   url: string;
 }
+export interface IUrlParams {
+  id?: string;
+  search?: string;
+  page?: string;
+}
