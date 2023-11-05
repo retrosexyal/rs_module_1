@@ -1,12 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 
 interface ButtonProps {
   onClick: () => void;
   text: string;
 }
 
-export class Button extends Component<ButtonProps> {
-  render() {
-    return <button onClick={this.props.onClick}>{this.props.text}</button>;
-  }
-}
+export const Button: React.FC<ButtonProps> = ({ onClick, text }) => {
+  return <button onClick={onClick}>{text}</button>;
+};

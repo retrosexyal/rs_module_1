@@ -1,4 +1,4 @@
-import React, { Component, ChangeEvent } from "react";
+import React, { useContext, useEffect } from "react";
 import { Input } from "../UI/Input/indext";
 import { Button } from "../UI/Button";
 import { FetchData } from "../../api/FetchData";
@@ -6,42 +6,37 @@ import { LocalStorageManager } from "../../helpers/LocalStorageManager";
 import SearchContext from "../../providers/SearchProviders";
 import styles from "./search.module.scss";
 
-export class Search extends Component {
-  static contextType = SearchContext;
-  declare context: React.ContextType<typeof SearchContext>;
+export const Search: React.FC = () => {
+  const { inputValue, handleInputChange, handleLoading, handleData } =
+    useContext(SearchContext);
 
-  handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.context.handleInputChange(event);
+  const handleClick = async () => {
+    handleLoading(true);
+    LocalStorageManager.set("search", inputValue);
+
+    try {
+      const { data } = await FetchData.getSearch(inputValue);
+      handleData(data.results);
+      handleLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      handleLoading(false);
+    }
   };
 
-  handleClick = async () => {
-    this.context.handleLoading(true);
-    LocalStorageManager.set("search", this.context.inputValue);
-    const { data } = await FetchData.getSearch(this.context.inputValue);
-    this.context.handleData(data.results);
-    this.context.handleLoading(false);
-  };
-  componentDidMount(): void {
+  useEffect(() => {
     const value = LocalStorageManager.get("search");
     if (value) {
-      const event = {
-        target: {
-          value: value,
-        },
-      };
-      this.context.handleInputChange(event as ChangeEvent<HTMLInputElement>);
+      handleInputChange({
+        target: { value },
+      } as React.ChangeEvent<HTMLInputElement>);
     }
-  }
+  }, []);
 
-  render() {
-    return (
-      <div className={styles["search-wrapper"]}>
-        <Input
-          onChange={this.handleInputChange}
-          value={this.context.inputValue}
-        />
-        <Button onClick={this.handleClick} text="find" />
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles["search-wrapper"]}>
+      <Input onChange={handleInputChange} value={inputValue} />
+      <Button onClick={handleClick} text="find" />
+    </div>
+  );
+};

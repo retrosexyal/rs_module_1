@@ -1,4 +1,4 @@
-import React, { Component, createContext, ReactNode, ChangeEvent } from "react";
+import React, { createContext, ReactNode, useState, ChangeEvent } from "react";
 import { IData } from "../interface";
 
 export interface SearchContextType {
@@ -25,39 +25,37 @@ interface SearchProviderProps {
   children: ReactNode;
 }
 
-export class SearchProvider extends Component<SearchProviderProps> {
-  state = {
-    inputValue: "",
-    data: null,
-    isLoading: false,
+export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
+  const [inputValue, setInputValue] = useState<string>("");
+  const [data, setData] = useState<IData[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
   };
 
-  handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ inputValue: event.target.value });
-  };
-  handleData = (data: IData[]) => {
-    this.setState({ data: data });
-  };
-  handleLoading = (isLoading: boolean) => {
-    this.setState({ isLoading: isLoading });
+  const handleData = (data: IData[]) => {
+    setData(data);
   };
 
-  render() {
-    const contextValue: SearchContextType = {
-      inputValue: this.state.inputValue,
-      handleInputChange: this.handleInputChange,
-      data: this.state.data,
-      handleData: this.handleData,
-      isLoading: this.state.isLoading,
-      handleLoading: this.handleLoading,
-    };
+  const handleLoading = (isLoading: boolean) => {
+    setIsLoading(isLoading);
+  };
 
-    return (
-      <SearchContext.Provider value={contextValue}>
-        {this.props.children}
-      </SearchContext.Provider>
-    );
-  }
-}
+  const contextValue: SearchContextType = {
+    inputValue,
+    handleInputChange,
+    data,
+    handleData,
+    isLoading,
+    handleLoading,
+  };
+
+  return (
+    <SearchContext.Provider value={contextValue}>
+      {children}
+    </SearchContext.Provider>
+  );
+};
 
 export default SearchContext;
