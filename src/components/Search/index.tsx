@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Input } from "../UI/Input/indext";
 import { Button } from "../UI/Button";
 import { FetchData } from "../../api/FetchData";
@@ -9,6 +9,7 @@ import styles from "./search.module.scss";
 export const Search: React.FC = () => {
   const { inputValue, handleInputChange, handleLoading, handleData } =
     useContext(SearchContext);
+  const handleInputChangeRef = useRef(handleInputChange);
 
   const handleClick = async () => {
     handleLoading(true);
@@ -27,7 +28,7 @@ export const Search: React.FC = () => {
   useEffect(() => {
     const value = LocalStorageManager.get("search");
     if (value) {
-      handleInputChange({
+      handleInputChangeRef.current({
         target: { value },
       } as React.ChangeEvent<HTMLInputElement>);
     }

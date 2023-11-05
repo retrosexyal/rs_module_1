@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import SearchContext from "../../providers/SearchProviders";
 import { LocalStorageManager } from "../../helpers/LocalStorageManager";
 import { FetchData } from "../../api/FetchData";
@@ -9,10 +9,12 @@ import styles from "./content.module.scss";
 export const Content: React.FC = () => {
   const { data, isLoading, handleLoading, handleData } =
     useContext(SearchContext);
+  const handleLoadingRef = useRef(handleLoading);
+  const handleDataRef = useRef(handleData);
 
   useEffect(() => {
     const lastSearch = LocalStorageManager.get("search");
-    handleLoading(true);
+    handleLoadingRef.current(true);
 
     const fetchData = async () => {
       try {
@@ -20,12 +22,12 @@ export const Content: React.FC = () => {
           ? await FetchData.getSearch(lastSearch)
           : await FetchData.getSearch();
 
-        handleData(searchData.results);
-        handleLoading(false);
+        handleDataRef.current(searchData.results);
+        handleLoadingRef.current(false);
         console.log(searchData);
       } catch (error) {
         console.error("Error fetching data:", error);
-        handleLoading(false);
+        handleLoadingRef.current(false);
       }
     };
 
