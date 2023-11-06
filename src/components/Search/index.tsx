@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Input } from "../UI/Input/indext";
-import { Button } from "../UI/Button";
 import { LocalStorageManager } from "../../helpers/LocalStorageManager";
 import SearchContext from "../../providers/SearchProviders";
 import styles from "./search.module.scss";
@@ -31,10 +30,10 @@ export const Search: React.FC = () => {
       <NavLink
         to={`search/${inputValue || "getallcharacters"}/page`}
         onClick={handleClick}
+        className={styles.btn}
       >
         Search
       </NavLink>
-      <Button onClick={handleClick} text="find" />
     </div>
   );
 };

@@ -1,16 +1,23 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { FetchData } from "../../api/FetchData";
-import { IUrlParams } from "../../interface";
+import { useLoaderData, useParams } from "react-router-dom";
+
+import { Card } from "../Card";
+import { IResponse } from "../../interface";
+
+import styles from "./details.module.scss";
 
 export const DetailsCard = () => {
-  const { id } = useParams();
-  return <div>{id}</div>;
-};
-export const detailsLoader = async ({ params }: { params: IUrlParams }) => {
-  const { search } = params;
+  const { name } = useParams();
+  console.log(name);
+  const data = useLoaderData() as IResponse;
+  const person = data.results.find((person) => person.name === name);
 
-  const { data } = await FetchData.getSearch(search);
-
-  return data.results;
+  return (
+    <div className={styles.wrapper}>
+      <Card person={person || data.results[0]} />
+      <p>details:</p>
+      <p>eye color: {person?.eye_color}</p>
+      <p>birth year: {person?.birth_year}</p>
+      <p>mass: {person?.mass} kg</p>
+    </div>
+  );
 };

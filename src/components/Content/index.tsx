@@ -1,17 +1,20 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useContext } from "react";
 import { FetchData } from "../../api/FetchData";
 import { Card } from "../Card";
 import { Wrapper } from "../UI/Wrapper";
 import styles from "./content.module.scss";
-import { Await, useLoaderData } from "react-router-dom";
+import { Await, Link, useLoaderData, useParams } from "react-router-dom";
 import { IResponse, IUrlParams } from "../../interface";
 import { Pagination } from "../Pagination";
 import { getNumberOfPages } from "../../helpers/getNumberOfPages";
+import SearchContext from "../../providers/SearchProviders";
 
 export const Content: React.FC = () => {
   const data = useLoaderData() as IResponse;
   const dataFetched = data.results;
   const pages = getNumberOfPages(data);
+  const { inputValue } = useContext(SearchContext);
+  const { page } = useParams();
 
   return (
     <Wrapper>
@@ -22,9 +25,14 @@ export const Content: React.FC = () => {
             errorElement={<div>Could not load data 😬</div>}
           >
             {dataFetched.map((person) => (
-              <div key={person.name}>
+              <Link
+                to={`/search/${inputValue || "getallcharacters"}/${
+                  page ? "page/" + page : "page"
+                }/details/${person.name}`}
+                key={person.name}
+              >
                 <Card person={person} />
-              </div>
+              </Link>
             ))}
           </Await>
         </Suspense>
