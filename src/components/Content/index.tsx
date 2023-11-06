@@ -46,6 +46,5 @@ export const dataLoader = async ({ params }: { params: IUrlParams }) => {
   const { search, page } = params;
   const searchParam = search === "getallcharacters" ? "" : search;
   const { data } = await FetchData.getSearch(searchParam || "", page || "");
-  console.log(data);
   return data;
 };

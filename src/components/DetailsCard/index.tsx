@@ -1,4 +1,4 @@
-import { useLoaderData, useParams } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
 
 import { Card } from "../Card";
 import { IResponse } from "../../interface";
@@ -7,8 +7,8 @@ import styles from "./details.module.scss";
 
 export const DetailsCard = () => {
   const { name } = useParams();
-  console.log(name);
   const data = useLoaderData() as IResponse;
+  const { search, page } = useParams();
   const person = data.results.find((person) => person.name === name);
 
   return (
@@ -18,6 +18,9 @@ export const DetailsCard = () => {
       <p>eye color: {person?.eye_color}</p>
       <p>birth year: {person?.birth_year}</p>
       <p>mass: {person?.mass} kg</p>
+      <Link to={`/search/${search}/page/${page || ""}`} className={styles.btn}>
+        Close details
+      </Link>
     </div>
   );
 };
