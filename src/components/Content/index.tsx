@@ -4,11 +4,14 @@ import { Card } from "../Card";
 import { Wrapper } from "../UI/Wrapper";
 import styles from "./content.module.scss";
 import { Await, useLoaderData } from "react-router-dom";
-import { IData, IUrlParams } from "../../interface";
+import { IResponse, IUrlParams } from "../../interface";
 import { Pagination } from "../Pagination";
+import { getNumberOfPages } from "../../helpers/getNumberOfPages";
 
 export const Content: React.FC = () => {
-  const dataFetched = useLoaderData() as IData[];
+  const data = useLoaderData() as IResponse;
+  const dataFetched = data.results;
+  const pages = getNumberOfPages(data);
 
   return (
     <Wrapper>
@@ -24,15 +27,17 @@ export const Content: React.FC = () => {
               </div>
             ))}
           </Await>
-          <Pagination number={3} />
         </Suspense>
       </div>
+      {pages > 1 && <Pagination number={pages} />}
     </Wrapper>
   );
 };
 
 export const dataLoader = async ({ params }: { params: IUrlParams }) => {
   const { search, page } = params;
-  const { data } = await FetchData.getSearch(search || "", page || "");
-  return data.results;
+  const searchParam = search === "getallcharacters" ? "" : search;
+  const { data } = await FetchData.getSearch(searchParam || "", page || "");
+  console.log(data);
+  return data;
 };

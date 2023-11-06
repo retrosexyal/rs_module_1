@@ -21,3 +21,9 @@ export interface IUrlParams {
   search?: string;
   page?: string;
 }
+export interface IResponse {
+  count: number;
+  next: string;
+  previous: string;
+  results: IData[];
+}

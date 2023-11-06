@@ -21,17 +21,19 @@ export const Search: React.FC = () => {
       handleInputChangeRef.current({
         target: { value },
       } as React.ChangeEvent<HTMLInputElement>);
-      navigate(`search/${value}`);
+      navigate(`search/${value}/page`);
     }
   }, [navigate]);
 
   return (
     <div className={styles["search-wrapper"]}>
       <Input onChange={handleInputChange} value={inputValue} />
-      <NavLink to={`search/${inputValue}`} onClick={handleClick}>
+      <NavLink
+        to={`search/${inputValue || "getallcharacters"}/page`}
+        onClick={handleClick}
+      >
         Search
       </NavLink>
-      {/*      {shouldRedirect && <Navigate to={`search/${inputValue}`} />} */}
       <Button onClick={handleClick} text="find" />
     </div>
   );

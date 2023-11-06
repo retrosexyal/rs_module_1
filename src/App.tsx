@@ -11,10 +11,13 @@ import { MainLayout } from "./layouts/MainLayout";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
-      <Route path="search/" element={<Content />} loader={dataLoader} />
-      <Route path="search/:search?" element={<Content />} loader={dataLoader}>
+      <Route
+        path="search?/:search?/page?/:page?"
+        element={<Content />}
+        loader={dataLoader}
+      >
         {/*         <Route path=":page" element={<DetailsCard />} loader={detailsLoader} /> */}
-        <Route path="page/:page" element={<Content />} loader={dataLoader} />
+        {/* <Route path="page?/:page" element={<Content />} loader={dataLoader} /> */}
       </Route>
     </Route>,
   ),
