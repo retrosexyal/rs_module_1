@@ -19,7 +19,7 @@ export const MainLayout = () => {
         handleData(data);
       })
       .then(() => handleLoading(false));
-  }, [page, search]);
+  }, [page, search, handleData, handleLoading]);
 
   return (
     <>
