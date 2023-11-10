@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../UI/Input/indext";
 import { LocalStorageManager } from "../../helpers/LocalStorageManager";
 import SearchContext from "../../providers/SearchProviders";
@@ -27,13 +27,13 @@ export const Search: React.FC = () => {
   return (
     <div className={styles["search-wrapper"]}>
       <Input onChange={handleInputChange} value={inputValue} />
-      <NavLink
+      <Link
         to={`search/${inputValue || "getallcharacters"}/page`}
         onClick={handleClick}
         className={styles.btn}
       >
         Search
-      </NavLink>
+      </Link>
     </div>
   );
 };

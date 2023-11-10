@@ -1,16 +1,15 @@
 import {
-  Route,
+  /*   Route, */
   RouterProvider,
   createBrowserRouter,
-  createRoutesFromElements,
+  /*   createRoutesFromElements, */
 } from "react-router-dom";
-import { dataLoader } from "./components/Content";
 import { SearchProvider } from "./providers/SearchProviders";
 import { MainLayout } from "./layouts/MainLayout";
 import { ContentLayout } from "./layouts/ContentLayout";
 import { DetailsCard } from "./components/DetailsCard";
 
-const router = createBrowserRouter(
+/* const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
       <Route
@@ -26,7 +25,25 @@ const router = createBrowserRouter(
       </Route>
     </Route>,
   ),
-);
+); */
+const router = createBrowserRouter([
+  {
+    element: <MainLayout />,
+    path: "/",
+    children: [
+      {
+        element: <ContentLayout />,
+        path: "search?/:search?/page?/:page?",
+        children: [
+          {
+            element: <DetailsCard />,
+            path: "details/:name?",
+          },
+        ],
+      },
+    ],
+  },
+]);
 
 function App() {
   return (

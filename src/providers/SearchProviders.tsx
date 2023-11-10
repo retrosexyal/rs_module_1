@@ -1,11 +1,11 @@
 import React, { createContext, ReactNode, useState, ChangeEvent } from "react";
-import { IData } from "../interface";
+import { IResponse } from "../interface";
 
 export interface SearchContextType {
   inputValue: string;
   handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  data: IData[] | null;
-  handleData: (data: IData[]) => void;
+  data: IResponse | null;
+  handleData: (data: IResponse) => void;
   isLoading: boolean;
   handleLoading: (isLoading: boolean) => void;
 }
@@ -27,14 +27,14 @@ interface SearchProviderProps {
 
 export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   const [inputValue, setInputValue] = useState<string>("");
-  const [data, setData] = useState<IData[] | null>(null);
+  const [data, setData] = useState<IResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
-  const handleData = (data: IData[]) => {
+  const handleData = (data: IResponse) => {
     setData(data);
   };
 
