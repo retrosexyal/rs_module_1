@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Card } from "../Card";
 import { Wrapper } from "../UI/Wrapper";
 import styles from "./content.module.scss";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 
 import { Pagination } from "../Pagination";
 import { getNumberOfPages } from "../../helpers/getNumberOfPages";
@@ -13,6 +13,8 @@ export const Content: React.FC = () => {
   const { inputValue, isLoading, data } = useContext(SearchContext);
   const [pages, setPages] = useState(0);
   const { page } = useParams();
+  const location = useLocation();
+  const isNotRootUrl = location.pathname !== "/";
   useEffect(() => {
     if (data) {
       setPages(getNumberOfPages(data));
@@ -36,7 +38,7 @@ export const Content: React.FC = () => {
             </Link>
           ))
         ) : (
-          <Navigate to="/notfound" />
+          <>{isNotRootUrl && <Navigate to="/notfound" />}</>
         )}
       </div>
       {pages > 1 && <Pagination number={pages} />}
