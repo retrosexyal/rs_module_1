@@ -9,4 +9,7 @@ export class FetchData {
       params: { search: search, page: page },
     });
   }
+  static async getChar(id = "") {
+    return api.get(`people/${id}`);
+  }
 }

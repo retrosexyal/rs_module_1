@@ -1,5 +1,11 @@
-import React, { createContext, ReactNode, useState, ChangeEvent } from "react";
-import { IResponse } from "../interface";
+import React, {
+  createContext,
+  ReactNode,
+  useState,
+  ChangeEvent,
+  useCallback,
+} from "react";
+import { IData, IResponse } from "../interface";
 
 export interface SearchContextType {
   inputValue: string;
@@ -8,6 +14,10 @@ export interface SearchContextType {
   handleData: (data: IResponse) => void;
   isLoading: boolean;
   handleLoading: (isLoading: boolean) => void;
+  personIsLoading: boolean;
+  handlePersonLoading: (isLoading: boolean) => void;
+  person: IData | null;
+  handlePerson: (data: IData) => void;
 }
 
 const defaultValue: SearchContextType = {
@@ -17,6 +27,10 @@ const defaultValue: SearchContextType = {
   handleData: () => {},
   isLoading: false,
   handleLoading: () => {},
+  personIsLoading: false,
+  handlePersonLoading: () => {},
+  person: null,
+  handlePerson: () => {},
 };
 
 export const SearchContext = createContext<SearchContextType>(defaultValue);
@@ -27,20 +41,27 @@ interface SearchProviderProps {
 
 export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   const [inputValue, setInputValue] = useState<string>("");
-  const [data, setData] = useState<IResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<IResponse | null>(null);
+  const [person, setPerson] = useState<IData | null>(null);
+  const [personIsLoading, setPersonIsLoading] = useState<boolean>(false);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
-  const handleData = (data: IResponse) => {
+  const handleData = useCallback((data: IResponse) => {
     setData(data);
-  };
-
-  const handleLoading = (isLoading: boolean) => {
+  }, []);
+  const handleLoading = useCallback((isLoading: boolean) => {
     setIsLoading(isLoading);
-  };
+  }, []);
+  const handlePersonLoading = useCallback((personIsLoading: boolean) => {
+    setPersonIsLoading(personIsLoading);
+  }, []);
+  const handlePerson = useCallback((data: IData) => {
+    setPerson(data);
+  }, []);
 
   const contextValue: SearchContextType = {
     inputValue,
@@ -49,6 +70,10 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
     handleData,
     isLoading,
     handleLoading,
+    personIsLoading,
+    handlePersonLoading,
+    person,
+    handlePerson,
   };
 
   return (

@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "format:fix": "prettier --write .",
     "prepare": "husky install",
-    "test": "jest --detectOpenHandles "
+    "test:detect": "jest --detectOpenHandles",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^1.5.1",

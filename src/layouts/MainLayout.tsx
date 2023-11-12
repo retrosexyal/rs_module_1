@@ -7,6 +7,7 @@ import { FetchData } from "../api/FetchData";
 export const MainLayout = () => {
   const { handleData, handleLoading } = useContext(SearchContext);
   const { page, search } = useParams();
+
   useEffect(() => {
     const searchParam = search === "getallcharacters" ? "" : search;
     handleLoading(true);
@@ -19,7 +20,7 @@ export const MainLayout = () => {
         handleData(data);
       })
       .then(() => handleLoading(false));
-  }, [page, search, handleData, handleLoading]);
+  }, [handleData, handleLoading, page, search]);
 
   return (
     <>

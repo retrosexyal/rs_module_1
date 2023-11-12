@@ -1,11 +1,12 @@
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { Content } from "../index";
 import {
   SearchContext,
   SearchContextType,
 } from "../../../providers/SearchProviders";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter /* , Route */ } from "react-router-dom";
 import { fakeData } from "../../../../test/__data__/testData";
+/* import { DetailsCard } from "../../DetailsCard"; */
 
 const mockData: SearchContextType = {
   inputValue: "",
@@ -14,6 +15,10 @@ const mockData: SearchContextType = {
   handleData: jest.fn(),
   isLoading: false,
   handleLoading: jest.fn(),
+  personIsLoading: false,
+  handlePersonLoading: jest.fn(),
+  person: null,
+  handlePerson: jest.fn(),
 };
 const mockDataWithoutCards: SearchContextType = {
   inputValue: "",
@@ -22,6 +27,10 @@ const mockDataWithoutCards: SearchContextType = {
   handleData: jest.fn(),
   isLoading: false,
   handleLoading: jest.fn(),
+  personIsLoading: false,
+  handlePersonLoading: jest.fn(),
+  person: null,
+  handlePerson: jest.fn(),
 };
 
 describe("test list card", () => {
@@ -47,5 +56,19 @@ describe("test list card", () => {
     );
     const cards = queryAllByTestId("card");
     expect(cards.length).toBe(0);
+  });
+  test("test click event to card", () => {
+    const { getAllByTestId } = render(
+      <SearchContext.Provider value={mockData}>
+        <BrowserRouter>
+          <Content />
+        </BrowserRouter>
+      </SearchContext.Provider>,
+    );
+    const cards = getAllByTestId("card");
+    fireEvent.click(cards[0]);
+
+    /*     const detais = getAllByTestId("details");
+    expect(detais); */
   });
 });
