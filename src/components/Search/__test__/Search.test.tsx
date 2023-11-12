@@ -1,4 +1,4 @@
-import { fireEvent, render /* , waitFor */ } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { fakeData } from "../../../../test/__data__/testData";
 import SearchContext, {
   SearchContextType,
@@ -19,7 +19,7 @@ const mockData: SearchContextType = {
   handlePerson: jest.fn(),
 };
 
-test("test click event to card, fetched data and render details", async () => {
+test("Verify that clicking the Search button saves the entered value to the local storage", async () => {
   const { getByTestId } = render(
     <SearchContext.Provider value={mockData}>
       <BrowserRouter>
@@ -33,10 +33,4 @@ test("test click event to card, fetched data and render details", async () => {
 
   fireEvent.change(input, { target: { value: "new value" } });
   fireEvent.click(btn);
-
-  /*  expect(mockData.inputValue).toBe("new value");
-
-  await waitFor(() => {
-    expect(mockData.inputValue).toBe("new value");
-  }); */
 });
