@@ -19,7 +19,7 @@ const defaultValue: SearchContextType = {
   handleLoading: () => {},
 };
 
-const SearchContext = createContext<SearchContextType>(defaultValue);
+export const SearchContext = createContext<SearchContextType>(defaultValue);
 
 interface SearchProviderProps {
   children: ReactNode;

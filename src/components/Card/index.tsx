@@ -13,7 +13,7 @@ export const Card: React.FC<CardProps> = ({ person }) => {
   const id = getPersonId(url);
 
   return (
-    <div className={styles["card-wrapper"]}>
+    <div className={styles["card-wrapper"]} data-testid="card">
       <div>name: {name}</div>
       <div>mass: {mass}</div>
       <div>height: {height}</div>
