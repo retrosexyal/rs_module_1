@@ -19,7 +19,7 @@ export const fakeData = {
       starships: ["X-wing", "Imperial Speeder Bike"],
       created: "dsadsa",
       edited: "dsadsa",
-      url: "string",
+      url: "string/1/",
     },
     {
       name: "Darth Vader",
@@ -37,7 +37,7 @@ export const fakeData = {
       starships: ["Executor", "Imperial Speeder Bike"],
       created: "dsadsa",
       edited: "dsadsa",
-      url: "string",
+      url: "string/2/",
     },
     {
       name: "Princess Leia Organa",

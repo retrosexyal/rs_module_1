@@ -31,6 +31,7 @@ export const Search: React.FC = () => {
         to={`search/${inputValue || "getallcharacters"}/page`}
         onClick={handleClick}
         className={styles.btn}
+        data-testid="search-btn"
       >
         Search
       </Link>

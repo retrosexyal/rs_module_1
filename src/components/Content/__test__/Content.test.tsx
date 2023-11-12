@@ -4,9 +4,11 @@ import {
   SearchContext,
   SearchContextType,
 } from "../../../providers/SearchProviders";
-import { BrowserRouter /* , Route */ } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { fakeData } from "../../../../test/__data__/testData";
-/* import { DetailsCard } from "../../DetailsCard"; */
+import { DetailsCard } from "../../DetailsCard";
+import { FetchData } from "../../../api/FetchData";
+import { AxiosRequestHeaders } from "axios";
 
 const mockData: SearchContextType = {
   inputValue: "",
@@ -33,6 +35,19 @@ const mockDataWithoutCards: SearchContextType = {
   handlePerson: jest.fn(),
 };
 
+jest.mock("../../../api/FetchData");
+(
+  FetchData.getChar as jest.MockedFunction<typeof FetchData.getChar>
+).mockResolvedValue({
+  data: fakeData.results[0],
+  status: 200,
+  statusText: "OK",
+  headers: {},
+  config: {
+    headers: {} as AxiosRequestHeaders,
+  },
+});
+
 describe("test list card", () => {
   test("renders 10 cards", () => {
     const { getAllByTestId } = render(
@@ -57,18 +72,28 @@ describe("test list card", () => {
     const cards = queryAllByTestId("card");
     expect(cards.length).toBe(0);
   });
-  test("test click event to card", () => {
+  test("test click event to card, fetched data and render details", () => {
     const { getAllByTestId } = render(
       <SearchContext.Provider value={mockData}>
         <BrowserRouter>
-          <Content />
+          <Routes>
+            <Route path="/" element={<Content />} />
+            <Route
+              path="/search/getallcharacters/page/details/:id?"
+              element={<DetailsCard />}
+            />
+          </Routes>
         </BrowserRouter>
       </SearchContext.Provider>,
     );
     const cards = getAllByTestId("card");
+    expect(window.location.pathname).toBe("/");
     fireEvent.click(cards[0]);
-
-    /*     const detais = getAllByTestId("details");
-    expect(detais); */
+    const details = getAllByTestId("details");
+    expect(details);
+    expect(window.location.pathname).toBe(
+      "/search/getallcharacters/page/details/1",
+    );
+    expect(FetchData.getChar).toHaveBeenCalled();
   });
 });

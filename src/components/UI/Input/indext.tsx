@@ -6,5 +6,5 @@ interface InputProps {
 }
 
 export const Input: React.FC<InputProps> = ({ onChange, value }) => {
-  return <input onChange={onChange} value={value} />;
+  return <input onChange={onChange} value={value} data-testid="input" />;
 };

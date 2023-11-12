@@ -23,7 +23,7 @@ export const DetailsCard = () => {
   return (
     <div className={styles.wrapper} data-testid="details">
       {personIsLoading ? (
-        <div>loading...</div>
+        <div data-testid="person-loading">loading...</div>
       ) : (
         person && (
           <>
