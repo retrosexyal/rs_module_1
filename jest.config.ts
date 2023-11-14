@@ -9,4 +9,6 @@ export default {
     "\\.(gif|ttf|eot|svg|png|css|less|scss)$":
       "<rootDir>/test/__ mocks __/fileMock.ts",
   },
+  collectCoverage: true,
+  collectCoverageFrom: ["./src/**"],
 };
