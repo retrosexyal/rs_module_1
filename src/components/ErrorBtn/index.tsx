@@ -12,7 +12,7 @@ export const ErrorBtn = () => {
     throw new Error("This is a simulated error");
   }
   return (
-    <div>
+    <div data-testid="error-btn">
       <Button onClick={handleClick} text="error" />
     </div>
   );

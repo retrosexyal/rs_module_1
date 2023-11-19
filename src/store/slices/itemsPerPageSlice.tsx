@@ -1,18 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { IData } from "../../interface";
 
 interface ItemsPerPageState {
-  value: number;
+  data: IData[];
 }
 
-const initialState = { value: 3 } as ItemsPerPageState;
+const initialState = { data: [] } as ItemsPerPageState;
 
 const itemsPerPageSlice = createSlice({
   name: "itemsPerPage",
   initialState,
   reducers: {
-    changeItemsPerPageValue(state, action: PayloadAction<number>) {
-      state.value = action.payload;
+    changeItemsPerPageValue(state, action: PayloadAction<IData[]>) {
+      state.data = action.payload;
     },
   },
 });

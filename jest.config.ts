@@ -11,4 +11,10 @@ export default {
   },
   collectCoverage: true,
   collectCoverageFrom: ["./src/**"],
+  testEnvironmentOptions: {
+    customExportConditions: [""],
+  },
+  setupFiles: ["./jest.polyfills.ts"],
+  verbose: true,
+  setupFilesAfterEnv: ["<rootDir>/src/setupTest.ts"],
 };

@@ -4,7 +4,6 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { SearchProvider } from "./providers/SearchProviders";
 import { MainLayout } from "./layouts/MainLayout";
 import { ContentLayout } from "./layouts/ContentLayout";
 import { DetailsCard } from "./components/DetailsCard";
@@ -23,9 +22,7 @@ const router = createBrowserRouter(
 function App() {
   return (
     <div>
-      <SearchProvider>
-        <RouterProvider router={router} />
-      </SearchProvider>
+      <RouterProvider router={router} />
     </div>
   );
 }

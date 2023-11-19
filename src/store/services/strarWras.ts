@@ -22,7 +22,7 @@ export const starWarsApi = createApi({
       },
     }),
     getChar: builder.query<IData, string>({
-      query: (id) => `people/${id}`,
+      query: (id = "") => `people/${id}`,
     }),
   }),
 });

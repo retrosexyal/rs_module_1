@@ -7,20 +7,20 @@ import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 import { Pagination } from "../Pagination";
 import { getNumberOfPages } from "../../helpers/getNumberOfPages";
 import { getPersonId } from "../../helpers/getPersonId";
-import { CardDisplayControl } from "../CardDisplayControl";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useGetSearchQuery } from "../../store/services/strarWras";
 import { changeContentIsLoading } from "../../store/slices/loadingSlice";
+import { changeItemsPerPageValue } from "../../store/slices/itemsPerPageSlice";
 
 export const Content: React.FC = () => {
   const { value: inputValue } = useAppSelector((state) => state.search);
   const { contentIsLoading } = useAppSelector((state) => state.loading);
-  const { value } = useAppSelector((state) => state.items);
   const dispatch = useAppDispatch();
   const [pages, setPages] = useState(0);
   const { page, search } = useParams();
   const location = useLocation();
-  const isNotRootUrl = location.pathname !== "/";
+  const isNotRootUrl =
+    location.pathname !== "/" && !/^\/search\/?(.+)/.test(location.pathname);
 
   const searchParam = search === "getallcharacters" ? "" : search;
   const { data, isFetching } = useGetSearchQuery({
@@ -30,7 +30,12 @@ export const Content: React.FC = () => {
   useEffect(() => {
     if (isFetching) {
       dispatch(changeContentIsLoading(true));
-    } else dispatch(changeContentIsLoading(false));
+    } else {
+      dispatch(changeContentIsLoading(false));
+      if (data?.results) {
+        dispatch(changeItemsPerPageValue(data.results));
+      }
+    }
     if (data) {
       setPages(getNumberOfPages(data));
     }
@@ -38,29 +43,25 @@ export const Content: React.FC = () => {
 
   return (
     <Wrapper>
-      <CardDisplayControl />
+      {pages > 1 && <Pagination number={pages} />}
       <div className={styles["content-wrapper"]}>
         {contentIsLoading ? (
           <div>loading</div>
         ) : data ? (
-          data.results.map(
-            (person, ind) =>
-              ind < value && (
-                <Link
-                  to={`/search/${inputValue || "getallcharacters"}/${
-                    page ? "page/" + page : "page"
-                  }/details/${getPersonId(person.url)}`}
-                  key={person.name}
-                >
-                  <Card person={person} />
-                </Link>
-              ),
-          )
+          data.results.map((person) => (
+            <Link
+              to={`/search/${inputValue || "getallcharacters"}/${
+                page ? "page/" + page : "page"
+              }/details/${getPersonId(person.url)}`}
+              key={person.name}
+            >
+              <Card person={person} />
+            </Link>
+          ))
         ) : (
           <>{isNotRootUrl && <Navigate to="/notfound" />}</>
         )}
       </div>
-      {pages > 1 && <Pagination number={pages} />}
     </Wrapper>
   );
 };

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/16</span>
+                <span class='fraction'>19/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/15</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -109,7 +109,8 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,21 +118,22 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">35x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -160,35 +162,36 @@
 import { Card } from "../Card";
 &nbsp;
 import styles from "./details.module.scss";
-import { useContext, useEffect } from "react";
-import SearchContext from "../../providers/SearchProviders";
-import { FetchData } from "../../api/FetchData";
+import { useGetCharQuery } from "../../store/services/strarWras";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { changeDetailsIsLoading } from "../../store/slices/loadingSlice";
+import { useEffect } from "react";
 &nbsp;
 export const DetailsCard = () =&gt; {
   const { id, search, page } = useParams();
-  const { person, handlePerson, handlePersonLoading, personIsLoading } =
-    useContext(SearchContext);
+  const dispatch = useAppDispatch();
+  const { detailsIsLoading } = useAppSelector((state) =&gt; state.loading);
+&nbsp;
+  const { data, isFetching } = useGetCharQuery(id || "1");
 &nbsp;
   useEffect(() =&gt; {
-    handlePersonLoading(true);
-    FetchData.getChar(id).then(({ data }) =&gt; {
-      handlePerson(data);
-      handlePersonLoading(false);
-    });
-  }, [handlePerson, handlePersonLoading, id]);
+    if (isFetching) {
+      dispatch(changeDetailsIsLoading(true));
+    } else dispatch(changeDetailsIsLoading(false));
+  }, [dispatch, isFetching, data, id]);
 &nbsp;
   return (
     &lt;div className={styles.wrapper} data-testid="details"&gt;
-      {personIsLoading ? (
+      {detailsIsLoading ? (
         &lt;div data-testid="person-loading"&gt;loading...&lt;/div&gt;
       ) : (
-        person &amp;&amp; (
+        data &amp;&amp; (
           &lt;&gt;
-            &lt;Card person={person} /&gt;
+            &lt;Card person={data} /&gt;
             &lt;p&gt;details:&lt;/p&gt;
-            &lt;p&gt;eye color: {person?.eye_color}&lt;/p&gt;
-            &lt;p&gt;birth year: {person?.birth_year}&lt;/p&gt;
-            &lt;p&gt;mass: {person?.mass} kg&lt;/p&gt;
+            &lt;p&gt;eye color: {data?.eye_color}&lt;/p&gt;
+            &lt;p&gt;birth year: {data?.birth_year}&lt;/p&gt;
+            &lt;p&gt;mass: {data?.mass} kg&lt;/p&gt;
             &lt;Link
               to={`/search/${search}/page/${page || ""}`}
               className={styles.btn}
@@ -208,7 +211,7 @@ export const DetailsCard = () =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-14T18:00:04.539Z
+                at 2023-11-19T15:32:44.974Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

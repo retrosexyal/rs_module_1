@@ -1,4 +1,8 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  PreloadedState,
+  combineReducers,
+  configureStore,
+} from "@reduxjs/toolkit";
 import { starWarsApi } from "./services/strarWras";
 import itemsPerPageReducer from "./slices/itemsPerPageSlice";
 import searchReducer from "./slices/searchSlice";
@@ -11,9 +15,10 @@ const rootReducer = combineReducers({
   starWarsApi: starWarsApi.reducer,
 });
 
-export const setupStore = () => {
+export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
   return configureStore({
     reducer: rootReducer,
+    preloadedState,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(starWarsApi.middleware),
   });

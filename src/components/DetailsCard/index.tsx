@@ -3,35 +3,36 @@ import { Link, useParams } from "react-router-dom";
 import { Card } from "../Card";
 
 import styles from "./details.module.scss";
-import { useContext, useEffect } from "react";
-import SearchContext from "../../providers/SearchProviders";
-import { FetchData } from "../../api/FetchData";
+import { useGetCharQuery } from "../../store/services/strarWras";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { changeDetailsIsLoading } from "../../store/slices/loadingSlice";
+import { useEffect } from "react";
 
 export const DetailsCard = () => {
   const { id, search, page } = useParams();
-  const { person, handlePerson, handlePersonLoading, personIsLoading } =
-    useContext(SearchContext);
+  const dispatch = useAppDispatch();
+  const { detailsIsLoading } = useAppSelector((state) => state.loading);
+
+  const { data, isFetching } = useGetCharQuery(id || "1");
 
   useEffect(() => {
-    handlePersonLoading(true);
-    FetchData.getChar(id).then(({ data }) => {
-      handlePerson(data);
-      handlePersonLoading(false);
-    });
-  }, [handlePerson, handlePersonLoading, id]);
+    if (isFetching) {
+      dispatch(changeDetailsIsLoading(true));
+    } else dispatch(changeDetailsIsLoading(false));
+  }, [dispatch, isFetching, data, id]);
 
   return (
     <div className={styles.wrapper} data-testid="details">
-      {personIsLoading ? (
+      {detailsIsLoading ? (
         <div data-testid="person-loading">loading...</div>
       ) : (
-        person && (
+        data && (
           <>
-            <Card person={person} />
+            <Card person={data} />
             <p>details:</p>
-            <p>eye color: {person?.eye_color}</p>
-            <p>birth year: {person?.birth_year}</p>
-            <p>mass: {person?.mass} kg</p>
+            <p>eye color: {data?.eye_color}</p>
+            <p>birth year: {data?.birth_year}</p>
+            <p>mass: {data?.mass} kg</p>
             <Link
               to={`/search/${search}/page/${page || ""}`}
               className={styles.btn}

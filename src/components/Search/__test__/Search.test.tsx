@@ -1,36 +1,32 @@
-import { fireEvent, render } from "@testing-library/react";
-import { fakeData } from "../../../../test/__data__/testData";
-import SearchContext, {
-  SearchContextType,
-} from "../../../providers/SearchProviders";
+import { fireEvent, waitFor } from "@testing-library/react";
+import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { Search } from "..";
-
-const mockData: SearchContextType = {
-  inputValue: "",
-  handleInputChange: jest.fn(),
-  data: fakeData,
-  handleData: jest.fn(),
-  isLoading: false,
-  handleLoading: jest.fn(),
-  personIsLoading: false,
-  handlePersonLoading: jest.fn(),
-  person: null,
-  handlePerson: jest.fn(),
-};
+import { renderWithProviders } from "../../../test-utils";
+import configureStore from "redux-mock-store";
+import "jest-localstorage-mock";
+const mockStore = configureStore();
+const initialState = { search: { value: "" } };
 
 test("Verify that clicking the Search button saves the entered value to the local storage", async () => {
-  const { getByTestId } = render(
-    <SearchContext.Provider value={mockData}>
+  const store = mockStore(initialState);
+
+  const { getByTestId } = renderWithProviders(
+    <Provider store={store}>
       <BrowserRouter>
         <Search />
       </BrowserRouter>
-    </SearchContext.Provider>,
+    </Provider>,
   );
   const input = getByTestId("input");
+  fireEvent.change(input, { target: { value: "testValue" } });
   const btn = getByTestId("search-btn");
-  expect(mockData.inputValue).toBe("");
-
-  fireEvent.change(input, { target: { value: "new value" } });
   fireEvent.click(btn);
+
+  await waitFor(() => {
+    const actions = store.getActions();
+    expect(actions).toEqual([
+      { type: "search/changeSearchValue", payload: "testValue" },
+    ]);
+  });
 });

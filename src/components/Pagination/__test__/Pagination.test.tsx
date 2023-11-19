@@ -1,34 +1,22 @@
 import { fireEvent, render } from "@testing-library/react";
-import SearchContext, {
-  SearchContextType,
-} from "../../../providers/SearchProviders";
+import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Pagination } from "..";
-import { fakeData } from "../../../../test/__data__/testData";
-
-const mockDataWithoutCards: SearchContextType = {
-  inputValue: "",
-  handleInputChange: jest.fn(),
-  data: { ...fakeData, results: [] },
-  handleData: jest.fn(),
-  isLoading: false,
-  handleLoading: jest.fn(),
-  personIsLoading: false,
-  handlePersonLoading: jest.fn(),
-  person: null,
-  handlePerson: jest.fn(),
-};
+import configureStore from "redux-mock-store";
+const mockStore = configureStore();
+const initialState = { search: { value: "" } };
 
 test("Make sure the component updates URL query parameter when page changes,", () => {
+  const store = mockStore(initialState);
   const { queryAllByText } = render(
-    <SearchContext.Provider value={mockDataWithoutCards}>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Pagination number={3} />} />
           <Route path="*" element={<div>page not found</div>} />
         </Routes>
       </BrowserRouter>
-    </SearchContext.Provider>,
+    </Provider>,
   );
   expect(window.location.pathname).toBe("/");
   const number = queryAllByText("2")[0];
