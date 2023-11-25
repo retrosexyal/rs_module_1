@@ -1,11 +1,14 @@
-import { Outlet } from "react-router-dom";
-import { Header } from "../components/Header";
+import { Header } from "@/compononts/Header";
 
-export const MainLayout = () => {
+interface IProps {
+  children: React.ReactNode;
+}
+
+export const MainLayout: React.FC<IProps> = ({ children }) => {
   return (
     <>
       <Header />
-      <Outlet />
+      {children}
     </>
   );
 };
