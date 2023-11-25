@@ -93,7 +93,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const data = store.dispatch(
       getSearch.initiate({
         search: (searchParam as string) || "",
-        page: (page as string) || "",
+        page: (page as string) || "1",
       })
     );
     await Promise.all(store.dispatch(getRunningQueriesThunk()));

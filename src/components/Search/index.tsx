@@ -1,14 +1,23 @@
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { Input } from "../UI/Input/indext";
 import { LocalStorageManager } from "../../helpers/LocalStorageManager";
 import styles from "./search.module.scss";
 import { changeSearchValue } from "../../store/slices/searchSlice";
 import { useAppSelector, useAppDispatch } from "../../hooks/redux";
+import { useRouter } from "next/router";
 
 export const Search: React.FC = () => {
   const dispatch = useAppDispatch();
   const { value } = useAppSelector((state) => state.search);
+  const router = useRouter();
+  const path = router.pathname;
+  useEffect(() => {
+    const value = LocalStorageManager.get("search");
+    if (path === "/" && value) {
+      router.push({ pathname: "/search/", query: { character: value } });
+    }
+  }, [path, router]);
 
   useEffect(() => {
     const value = LocalStorageManager.get("search");
@@ -30,7 +39,7 @@ export const Search: React.FC = () => {
       <Link
         href={{
           pathname: "/search/",
-          query: { character: value , page: "1" },
+          query: { character: value, page: "1" },
         }}
         onClick={handleClick}
         className={styles.btn}
