@@ -1,4 +1,4 @@
-import { Header } from "@/compononts/Header";
+import { Header } from "@/components/Header";
 
 interface IProps {
   children: React.ReactNode;

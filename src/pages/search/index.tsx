@@ -1,7 +1,6 @@
-import { Content } from "@/compononts/Content";
+import { Content } from "@/components/Content";
 import { MainLayout } from "@/layouts/MainLayout";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import React from "react";
 
 const index = () => {

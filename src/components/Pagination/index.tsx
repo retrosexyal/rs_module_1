@@ -1,7 +1,6 @@
 import Link from "next/link";
 import styles from "./pagination.module.scss";
 import { useAppSelector } from "../../hooks/redux";
-import { queries } from "@testing-library/react";
 
 interface IProps {
   number: number;

@@ -1,12 +1,19 @@
 import Link from "next/link";
 import { Card } from "../Card";
-
 import styles from "./details.module.scss";
-import { useGetCharQuery } from "../../store/services/strarWras";
+import {
+  getChar,
+  getRunningQueriesThunk,
+  useGetCharQuery,
+} from "../../store/services/strarWras";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { changeDetailsIsLoading } from "../../store/slices/loadingSlice";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { wrapper } from "@/store";
+type QueryObject = {
+  id?: string;
+};
 
 export const DetailsCard = () => {
   const router = useRouter();
@@ -15,7 +22,13 @@ export const DetailsCard = () => {
   const dispatch = useAppDispatch();
   const { detailsIsLoading } = useAppSelector((state) => state.loading);
 
-  const { data, isFetching } = useGetCharQuery((id as string) || "1");
+  const queryObject: QueryObject = {};
+  if (typeof id === "string") {
+    queryObject.id = id;
+  }
+  const { data, isFetching } = useGetCharQuery(queryObject.id as string, {
+    skip: router.isFallback,
+  });
 
   useEffect(() => {
     if (isFetching) {
@@ -50,3 +63,14 @@ export const DetailsCard = () => {
     </div>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const { id } = context.query;
+    const data = store.dispatch(getChar.initiate(id as string));
+    await Promise.all(store.dispatch(getRunningQueriesThunk()));
+    return {
+      props: {},
+    };
+  }
+);
