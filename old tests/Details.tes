@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+/* import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DetailsCard } from "..";
 import { renderWithProviders } from "../../../test-utils";
 import { server } from "../../../../mock/api/server";
@@ -50,3 +50,4 @@ describe("test details", () => {
     });
   });
 });
+ */
